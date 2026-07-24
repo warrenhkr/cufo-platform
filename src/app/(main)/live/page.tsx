@@ -1,18 +1,24 @@
-import GlassCard from '@/components/GlassCard'
+import Card from '@/components/Card'
+import PageHeader from '@/components/PageHeader'
+import SectionHeader from '@/components/SectionHeader'
+import { mockMatchEnCours } from '@/lib/mockData'
 
 export default function LivePage() {
+  const match = mockMatchEnCours
+
   return (
     <div>
-      <h1 className="text-white text-2xl font-bold mb-6">En Direct</h1>
+      <PageHeader title="En Direct" subtitle="Suivez les matchs en cours en temps réel" />
 
-      <GlassCard className="p-6 max-w-md">
-        <p className="text-white/70 text-sm mb-2">Match test</p>
-        <div className="flex items-center justify-between text-white">
-          <span className="font-semibold">Équipe A</span>
-          <span className="text-amber-400 font-bold text-lg">2 - 1</span>
-          <span className="font-semibold">Équipe B</span>
+      <SectionHeader eyebrow="Ce qui se joue maintenant" title="Match" accent="En Cours" />
+      <Card className="p-6 max-w-md">
+        <p className="text-gray-500 text-sm mb-2">{match.date}</p>
+        <div className="flex items-center justify-between text-navy-950">
+          <span className="font-semibold">{match.equipeA}</span>
+          <span className="text-red-600 font-bold text-lg">{match.scoreA} - {match.scoreB}</span>
+          <span className="font-semibold">{match.equipeB}</span>
         </div>
-      </GlassCard>
+      </Card>
     </div>
   )
 }
