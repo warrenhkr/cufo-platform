@@ -1,23 +1,43 @@
-import { Barlow_Condensed, Inter } from 'next/font/google'
-import './globals.css'
+import type { Metadata } from "next";
+import { Barlow_Condensed, Manrope } from "next/font/google";
+import { ThemeProvider } from "next-themes";
+import "./globals.css";
 
 const barlowCondensed = Barlow_Condensed({
-  subsets: ['latin'],
-  weight: ['600', '700', '800'],
-  variable: '--font-heading',
-})
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-heading",
+  display: "swap",
+});
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-body',
-})
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-body",
+  display: "swap",
+});
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+  title: "Football UCAO-UUC",
+  description: "Classement, résultats et actualités du championnat de football UCAO-UUC",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="fr">
-      <body className={`${barlowCondensed.variable} ${inter.variable} font-sans`}>
-        {children}
+    <html
+      lang="fr"
+      className={`${barlowCondensed.variable} ${manrope.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="antialiased">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

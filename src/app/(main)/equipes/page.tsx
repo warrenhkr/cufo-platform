@@ -6,7 +6,7 @@ import { mockEquipes } from '@/lib/mockData'
 export default function EquipesPage() {
   return (
     <div>
-      <PageHeader title="Actualités & Équipes" subtitle="Suivez la vie des équipes et les dernières communications" />
+      <PageHeader title="Équipes" subtitle="Effectifs, classement et statistiques de chaque équipe du championnat" />
 
       <SectionHeader eyebrow="Toutes les équipes inscrites" title="Nos" accent="Équipes" />
       <div className="grid grid-cols-2 gap-4 max-w-md">

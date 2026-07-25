@@ -10,6 +10,183 @@
     --font-heading: var(--font-heading), sans-serif;
 }
 
-body {
-    background-color: #f8f9fb;
+:root {
+    --background: oklch(0.9785 0.0045 258.3245);
+    --foreground: oklch(0.2375 0.0692 265.9795);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.2375 0.0692 265.9795);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.2375 0.0692 265.9795);
+    --primary: oklch(0.5363 0.2013 24.2318);
+    --primary-foreground: oklch(1 0 0);
+    --secondary: oklch(0.3222 0.0944 267.3174);
+    --secondary-foreground: oklch(1 0 0);
+    --muted: oklch(0.9683 0.0069 247.8956);
+    --muted-foreground: oklch(0.5544 0.0407 257.4166);
+    --accent: oklch(0.8056 0.1572 89.1311);
+    --accent-foreground: oklch(0.2375 0.0692 265.9795);
+    --destructive: oklch(0.5771 0.2152 27.3250);
+    --destructive-foreground: oklch(1 0 0);
+    --border: oklch(0.9288 0.0126 255.5078);
+    --input: oklch(0.9288 0.0126 255.5078);
+    --ring: oklch(0.5363 0.2013 24.2318);
+    --chart-1: oklch(0.5363 0.2013 24.2318);
+    --chart-2: oklch(0.8056 0.1572 89.1311);
+    --chart-3: oklch(0.3222 0.0944 267.3174);
+    --chart-4: oklch(0.2727 0.0827 268.1382);
+    --chart-5: oklch(0.7107 0.0351 256.7878);
+    --sidebar: var(--background);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--accent);
+    --sidebar-accent-foreground: var(--accent-foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
+    --radius: 0.625rem;
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        min-height: 100vh;
+        font-family: var(--font-sans);
+        color: var(--foreground);
+        background-color: var(--background);
+        background-image: radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 22%), radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.9), transparent 18%), linear-gradient(180deg, rgba(248, 249, 251, 0.98), rgba(248, 249, 251, 1));
+        background-attachment: fixed;
+        -webkit-font-smoothing: antialiased;
+    }
+     ::selection {
+        background: rgba(200, 30, 44, 0.2);
+        color: inherit;
+    }
+     ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+     ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+     ::-webkit-scrollbar-thumb {
+        background: var(--color-navy-900);
+        border-radius: 999px;
+    }
+     ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-red-600);
+    }
+    @keyframes pulse-live {
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.5;
+            transform: scale(0.85);
+        }
+    }
+    @keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
+    }
+}
+
+@layer utilities {
+    .card-surface {
+        @apply bg-white/95 border border-slate-200/80 rounded-[1.75rem] backdrop-blur-xl transition-all duration-300;
+        box-shadow: 0 30px 60px -30px rgba(15, 28, 63, 0.35);
+    }
+    .card-surface:hover {
+        @apply border-slate-200;
+        box-shadow: 0 40px 80px -30px rgba(15, 28, 63, 0.45);
+    }
+    .hero-surface {
+        @apply relative overflow-hidden rounded-4xl border border-white/10 bg-linear-to-br from-[#0f1c3f] via-[#16234f] to-[#1e2f63] text-white;
+        box-shadow: 0 40px 120px -50px rgba(15, 28, 63, 0.45);
+    }
+    .pitch-texture {
+        background-image: repeating-linear-gradient( 90deg, rgba(255, 255, 255, 0.035) 0px, rgba(255, 255, 255, 0.035) 40px, transparent 40px, transparent 80px);
+    }
+    .field-graphic {
+        background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12), transparent 14%), radial-gradient(circle at 80% 40%, rgba(255, 255, 255, 0.08), transparent 10%), linear-gradient(0deg, rgba(255, 255, 255, 0.06), transparent 1px);
+    }
+    .text-glow {
+        text-shadow: 0 10px 30px rgba(15, 28, 63, 0.18);
+    }
+    .btn-primary {
+        @apply inline-flex items-center justify-center rounded-full bg-red-600 text-white font-semibold transition duration-200 hover:bg-red-700 active:scale-[0.98] px-5 py-3 shadow-lg shadow-red-600/20;
+    }
+    .btn-secondary {
+        @apply inline-flex items-center justify-center rounded-full border border-white/30 bg-white/85 text-navy-950 font-semibold transition duration-200 hover:border-red-600 hover:text-red-600 px-5 py-3;
+    }
+    .table-row-hover {
+        @apply transition-colors duration-150 hover:bg-navy-950/[0.03];
+    }
+    .badge-live {
+        @apply inline-flex items-center gap-1.5 bg-red-600/10 text-red-600 text-xs font-bold uppercase px-3 py-1.5 rounded-full;
+    }
+    .badge-live-dot {
+        @apply w-2 h-2 rounded-full bg-red-600;
+        animation: pulse-live 1.5s ease-in-out infinite;
+    }
+    .badge-gold {
+        @apply inline-flex items-center gap-1.5 bg-gold-400/15 text-navy-950 text-xs font-bold uppercase px-3 py-1.5 rounded-full border border-gold-400/40;
+    }
+    .table-row-highlight {
+        @apply bg-gold-400/10 border-l-2 border-gold-400;
+    }
+    .shimmer {
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+    }
 }
