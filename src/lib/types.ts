@@ -9,8 +9,6 @@ export interface Team {
   primaryColor: string;
 }
 
-export type MatchStatus = "live" | "upcoming" | "finished" | "halftime";
-
 export interface LiveMatchSummary {
   status: "live" | "halftime";
   homeTeam: Team;
@@ -61,70 +59,6 @@ export interface NewsArticle {
   category: NewsCategory;
   publishedLabel: string;
   imageUrl: string | null;
-}
-
-// --- Match en direct (doc UX/UI section 4) ---
-
-export type MatchEventType =
-  | "kickoff"
-  | "goal"
-  | "yellowCard"
-  | "redCard"
-  | "substitution"
-  | "corner"
-  | "halftime"
-  | "fulltime";
-
-export interface MatchEvent {
-  id: string;
-  minute: number;
-  type: MatchEventType;
-  team?: "home" | "away";
-  player?: string;
-  playerIn?: string;
-  playerOut?: string;
-}
-
-export interface LineupPlayer {
-  number: number;
-  name: string;
-  position: string;
-}
-
-export interface MatchStats {
-  possessionHome: number;
-  possessionAway: number;
-  shotsOnTargetHome: number;
-  shotsOnTargetAway: number;
-  cornersHome: number;
-  cornersAway: number;
-  foulsHome: number;
-  foulsAway: number;
-}
-
-export interface HeadToHead {
-  totalMeetings: number;
-  homeWins: number;
-  awayWins: number;
-  draws: number;
-}
-
-export interface MatchDetail {
-  id: string;
-  status: MatchStatus;
-  homeTeam: Team;
-  awayTeam: Team;
-  homeScore: number | null;
-  awayScore: number | null;
-  minute: number | null;
-  matchday: number;
-  kickoffLabel?: string;
-  events: MatchEvent[];
-  lineupHome: LineupPlayer[];
-  lineupAway: LineupPlayer[];
-  stats: MatchStats;
-  headToHead: HeadToHead;
-  mvpVoteDeadline?: string;
 }
 
 // --- Compétition : Classement (doc UX/UI section 7) ---

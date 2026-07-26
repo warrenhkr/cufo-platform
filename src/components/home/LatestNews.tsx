@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { NewsArticle } from "@/lib/types";
@@ -12,16 +12,19 @@ interface LatestNewsProps {
 }
 
 function NewsCard({ article, index }: { article: NewsArticle; index: number }) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 8 }}
+      whileInView={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10% 0px" }}
-      transition={{ duration: 0.3, delay: index * 0.06 }}
+      whileHover={reduceMotion ? {} : { y: -6, scale: 1.02 }}
+      transition={{ duration: 0.3, delay: index * 0.06, ease: "easeOut" }}
       className="w-[260px] shrink-0 snap-start sm:w-auto"
     >
       <Link href={`/actualites/${article.slug}`} className="block h-full">
-        <Card className="flex h-full flex-col gap-3 p-4">
+        <Card className="flex h-full flex-col gap-3 p-4 shadow-sm transition-shadow duration-200 hover:shadow-xl">
           <div className="flex h-32 w-full items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/70">
             <span className="font-heading text-sm font-semibold uppercase tracking-wide text-primary-foreground/70">
               FootUCAO
@@ -33,9 +36,7 @@ function NewsCard({ article, index }: { article: NewsArticle; index: number }) {
           <p className="font-heading text-lg font-semibold leading-tight text-foreground">
             {article.title}
           </p>
-          <p className="line-clamp-2 text-sm text-muted-foreground">
-            {article.excerpt}
-          </p>
+          <p className="line-clamp-2 text-sm text-muted-foreground">{article.excerpt}</p>
           <span className="mt-auto text-xs text-muted-foreground/80">
             {article.publishedLabel}
           </span>

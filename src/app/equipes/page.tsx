@@ -12,8 +12,8 @@ export default function TeamsPage() {
       <p className="mt-1.5 mb-8 text-base text-muted-foreground">8 équipes, un seul trophée</p>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        {standings.map((entry) => (
-          <TeamCard key={entry.team.id} entry={entry} />
+        {standings.map((entry, index) => (
+          <TeamCard key={entry.team.id} entry={entry} index={index} />
         ))}
       </div>
     </Container>

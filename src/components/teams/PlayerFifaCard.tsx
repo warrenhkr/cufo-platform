@@ -2,7 +2,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { X, UserRound, Share2 } from "lucide-react";
 import type { Player } from "@/lib/team-types";
 import type { Team } from "@/lib/types";
@@ -25,6 +25,7 @@ const ATTRIBUTE_LABELS: { key: keyof Player["attributes"]; label: string }[] = [
 
 export function PlayerFifaCard({ player, team, open, onClose }: PlayerFifaCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
   const [exportState, setExportState] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   async function handleExport() {
@@ -45,6 +46,8 @@ export function PlayerFifaCard({ player, team, open, onClose }: PlayerFifaCardPr
     }
   }
 
+  const layoutId = `player-card-${player.id}`;
+
   return (
     <AnimatePresence>
       {open && (
@@ -56,6 +59,7 @@ export function PlayerFifaCard({ player, team, open, onClose }: PlayerFifaCardPr
           onClick={onClose}
         >
           <motion.div
+            layoutId={layoutId}
             initial={{ opacity: 0, scale: 0.94, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 12 }}
@@ -74,7 +78,7 @@ export function PlayerFifaCard({ player, team, open, onClose }: PlayerFifaCardPr
 
             <motion.div
               ref={cardRef}
-              whileHover={{ rotateY: 4 }}
+              whileHover={reduceMotion ? {} : { rotateY: 4 }}
               transition={{ duration: 0.15 }}
               style={{ transformStyle: "preserve-3d" }}
               className="flex w-72 flex-col items-center gap-4 rounded-3xl border border-border bg-card p-6 text-card-foreground shadow-xl"

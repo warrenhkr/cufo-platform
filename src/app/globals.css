@@ -1,45 +1,45 @@
 @import "tailwindcss";
 @custom-variant dark (&:is(.dark *));
 :root {
-    --background: oklch(0.9839 0.0025 228.7834);
-    --foreground: oklch(0.2070 0.0380 265.0691);
-    --card: oklch(1.0000 0 0);
-    --card-foreground: oklch(0.2070 0.0380 265.0691);
-    --popover: oklch(1.0000 0 0);
-    --popover-foreground: oklch(0.2070 0.0380 265.0691);
-    --primary: oklch(0.3239 0.0751 264.3502);
-    --primary-foreground: oklch(0.9842 0.0034 247.8575);
-    --secondary: oklch(0.5785 0.2138 27.1723);
-    --secondary-foreground: oklch(0.9842 0.0034 247.8575);
-    --muted: oklch(0.9537 0.0052 247.8781);
-    --muted-foreground: oklch(0.5574 0.0393 256.4017);
-    --accent: oklch(0.7862 0.1599 85.6788);
-    --accent-foreground: oklch(0.2070 0.0380 265.0691);
-    --destructive: oklch(0.6358 0.2088 25.4126);
-    --destructive-foreground: oklch(0.9842 0.0034 247.8575);
-    --border: oklch(0.9257 0.0126 255.5081);
-    --input: oklch(0.9257 0.0126 255.5081);
-    --ring: oklch(0.3239 0.0751 264.3502);
-    --chart-1: oklch(0.3239 0.0751 264.3502);
-    --chart-2: oklch(0.5785 0.2138 27.1723);
-    --chart-3: oklch(0.7862 0.1599 85.6788);
-    --chart-4: oklch(0.5459 0.2154 262.7465);
-    --chart-5: oklch(0.5103 0 0);
+    --background: #F7F8FA;
+    --foreground: #1E2A4F;
+    --card: #FFFFFF;
+    --card-foreground: #1E2A4F;
+    --popover: #FFFFFF;
+    --popover-foreground: #1E2A4F;
+    --primary: #1E2A4F;
+    --primary-foreground: #FFFFFF;
+    --secondary: #D6293B;
+    --secondary-foreground: #FFFFFF;
+    --muted: #EEF1F5;
+    --muted-foreground: #6B7280;
+    --accent: #E3B23C;
+    --accent-foreground: #1E2A4F;
+    --destructive: #B8202F;
+    --destructive-foreground: #FFFFFF;
+    --border: #E2E5EC;
+    --input: #E2E5EC;
+    --ring: #1E2A4F;
+    --chart-1: #1E2A4F;
+    --chart-2: #D6293B;
+    --chart-3: #E3B23C;
+    --chart-4: #253159;
+    --chart-5: #6B7280;
     --sidebar: oklch(0.2432 0.0505 264.9394);
     --sidebar-foreground: oklch(0.9842 0.0034 247.8575);
-    --sidebar-primary: oklch(0.5785 0.2138 27.1723);
+    --sidebar-primary: #D6293B;
     --sidebar-primary-foreground: oklch(0.9842 0.0034 247.8575);
     --sidebar-accent: oklch(0.3328 0.0780 264.9886);
     --sidebar-accent-foreground: oklch(0.9842 0.0034 247.8575);
     --sidebar-border: oklch(0.3735 0.0899 265.1771);
-    --sidebar-ring: oklch(0.7862 0.1599 85.6788);
+    --sidebar-ring: #E3B23C;
     /* Manrope = corps, Barlow Condensed = titres. Ces valeurs sont des
      fallbacks : next/font écrase --font-sans / --font-heading avec les
      vraies polices chargées via layout.tsx (voir plus bas). */
     --font-sans: "Manrope", "System UI", sans-serif;
     --font-heading: "Barlow Condensed", "System UI", sans-serif;
     --font-mono: "JetBrains Mono", monospace;
-    /* Radius relevé pour le style iOS (16–24px de coins) */
+    /* Radius inchangé (style iOS) — Figma Make proposait 0.625rem, à trancher (voir note) */
     --radius: 1rem;
     --shadow-x: 0px;
     --shadow-y: 1px;
@@ -181,6 +181,23 @@
 }
 
 
+/* Scrollbar fine — repris de l'exploration Figma Make */
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+
 /* Utilitaires glassmorphism — dérivés des tokens du thème, pas de couleur
    en dur, donc ils s'adaptent automatiquement en dark mode. */
 
@@ -196,4 +213,67 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid color-mix(in oklch, var(--primary-foreground) 15%, transparent);
+}
+
+
+/* Score du match — déjà en place (Copilot), inchangé */
+
+@keyframes score-bump {
+    0% {
+        transform: scale(1.18);
+        text-shadow: 0 0 16px color-mix(in oklch, var(--secondary) 70%, transparent);
+    }
+    100% {
+        transform: scale(1);
+        text-shadow: 0 0 0 transparent;
+    }
+}
+
+.animate-score-bump {
+    animation: score-bump 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* Badge live — nouveau, exploration Figma Make */
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+.animate-pulse-ring {
+    animation: pulse-ring 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+
+/* Micro-interactions ponctuelles — nouveau, exploration Figma Make.
+   Ne pas utiliser pour le scroll-reveal des sections : c'est le rôle de Reveal.tsx. */
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.4s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-score-bump,
+    .animate-pulse-ring,
+    .animate-fade-in {
+        animation: none;
+    }
 }

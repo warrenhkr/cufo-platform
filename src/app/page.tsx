@@ -4,6 +4,7 @@ import { CompetitionSummary } from "@/components/home/CompetitionSummary";
 import { FeaturedPlayers } from "@/components/home/FeaturedPlayers";
 import { LatestNews } from "@/components/home/LatestNews";
 import { SuggestionTeaser } from "@/components/home/SuggestionTeaser";
+import { Reveal } from "@/components/ui/Reveal";
 import { Container } from "@/components/ui/Container";
 import {
   competitionSummary,
@@ -27,10 +28,18 @@ export default function HomePage() {
       <Hero match={matchHighlight} />
 
       <Container className="flex flex-col gap-12 py-10 sm:gap-16 sm:py-14">
-        <CompetitionSummary stats={competitionSummary} />
-        <FeaturedPlayers players={featuredPlayers} />
-        <LatestNews articles={latestNews} />
-        <SuggestionTeaser />
+        <Reveal>
+          <CompetitionSummary stats={competitionSummary} />
+        </Reveal>
+        <Reveal delay={0.05}>
+          <FeaturedPlayers players={featuredPlayers} />
+        </Reveal>
+        <Reveal delay={0.1}>
+          <LatestNews articles={latestNews} />
+        </Reveal>
+        <Reveal delay={0.15}>
+          <SuggestionTeaser />
+        </Reveal>
       </Container>
     </main>
   );

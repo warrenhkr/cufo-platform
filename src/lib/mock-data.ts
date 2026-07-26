@@ -5,7 +5,6 @@ import type {
   MatchHighlight,
   NewsArticle,
   Team,
-  MatchDetail,
   StandingEntry,
 } from "./types";
 
@@ -82,61 +81,6 @@ export const latestNews: NewsArticle[] = [
     imageUrl: null,
   },
 ];
-
-// --- Match en direct : détail complet (doc UX/UI section 4) ---
-export const matchDetail: MatchDetail = {
-  id: "lions-aigles-j6",
-  status: "live",
-  homeTeam: teams.lions,
-  awayTeam: teams.aigles,
-  homeScore: 2,
-  awayScore: 1,
-  minute: 67,
-  matchday: 6,
-  events: [
-    { id: "e1", minute: 0, type: "kickoff" },
-    { id: "e2", minute: 12, type: "corner", team: "home" },
-    { id: "e3", minute: 34, type: "goal", team: "home", player: "Junior Adjovi" },
-    { id: "e4", minute: 41, type: "yellowCard", team: "away", player: "Malick Sossou" },
-    { id: "e5", minute: 45, type: "halftime" },
-    { id: "e6", minute: 52, type: "goal", team: "away", player: "Aristide Kindjinou" },
-    { id: "e7", minute: 61, type: "goal", team: "home", player: "Junior Adjovi" },
-    { id: "e8", minute: 65, type: "substitution", team: "home", playerIn: "Prudence Houngbédji", playerOut: "Franck Agbodjan" },
-  ],
-  lineupHome: [
-    { number: 1, name: "Bruno Kakpo", position: "Gardien" },
-    { number: 2, name: "Fabrice Dossou", position: "Défenseur" },
-    { number: 3, name: "Ismaël Tossou", position: "Défenseur" },
-    { number: 4, name: "Régis Amoussou", position: "Défenseur" },
-    { number: 5, name: "Wilfried Zannou", position: "Défenseur" },
-    { number: 6, name: "Cyrille Hounkpé", position: "Milieu" },
-    { number: 7, name: "Junior Adjovi", position: "Attaquant" },
-    { number: 8, name: "Franck Agbodjan", position: "Milieu" },
-    { number: 9, name: "Steve Aholou", position: "Attaquant" },
-    { number: 10, name: "David Gbaguidi", position: "Milieu" },
-    { number: 11, name: "Prudence Houngbédji", position: "Attaquant" },
-  ],
-  lineupAway: [
-    { number: 1, name: "Alain Vodounou", position: "Gardien" },
-    { number: 2, name: "Bertin Klotoè", position: "Défenseur" },
-    { number: 3, name: "Judicaël Adéyemi", position: "Défenseur" },
-    { number: 4, name: "Rufin Dansou", position: "Défenseur" },
-    { number: 5, name: "Éric Houndjo", position: "Défenseur" },
-    { number: 6, name: "Salifou Baba", position: "Milieu" },
-    { number: 7, name: "Malick Sossou", position: "Milieu" },
-    { number: 8, name: "Landry Chabi", position: "Milieu" },
-    { number: 9, name: "Aristide Kindjinou", position: "Attaquant" },
-    { number: 10, name: "Théophile Agossou", position: "Attaquant" },
-    { number: 11, name: "Osée Migan", position: "Attaquant" },
-  ],
-  stats: {
-    possessionHome: 54, possessionAway: 46,
-    shotsOnTargetHome: 6, shotsOnTargetAway: 3,
-    cornersHome: 5, cornersAway: 2,
-    foulsHome: 8, foulsAway: 11,
-  },
-  headToHead: { totalMeetings: 5, homeWins: 2, awayWins: 1, draws: 2 },
-};
 
 // --- Compétition : Classement (doc UX/UI section 7) — Journée 6 / 14 ---
 

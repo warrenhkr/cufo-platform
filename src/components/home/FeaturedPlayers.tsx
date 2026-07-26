@@ -1,7 +1,7 @@
 // components/home/FeaturedPlayers.tsx
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { FeaturedPlayer } from "@/lib/types";
@@ -11,6 +11,7 @@ interface FeaturedPlayersProps {
 }
 
 function PlayerCard({ player, index }: { player: FeaturedPlayer; index: number }) {
+  const reduceMotion = useReducedMotion();
   const initials = player.name
     .split(" ")
     .map((w) => w[0])
@@ -20,13 +21,14 @@ function PlayerCard({ player, index }: { player: FeaturedPlayer; index: number }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 8 }}
+      whileInView={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10% 0px" }}
-      transition={{ duration: 0.3, delay: index * 0.06 }}
+      whileHover={reduceMotion ? {} : { y: -6, scale: 1.03 }}
+      transition={{ duration: 0.3, delay: index * 0.06, ease: "easeOut" }}
       className="w-[168px] shrink-0 snap-start sm:w-auto"
     >
-      <Card className="flex h-full flex-col items-center gap-3 px-4 py-5 text-center">
+      <Card className="flex h-full flex-col items-center gap-3 px-4 py-5 text-center shadow-sm transition-shadow duration-200 hover:shadow-xl">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground">
           {initials}
         </div>

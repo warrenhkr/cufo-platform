@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "motion/react";
 import { Card } from "@/components/ui/Card";
 import { PlayerFifaCard } from "./PlayerFifaCard";
 import type { Team, StandingEntry } from "@/lib/types";
@@ -49,17 +50,27 @@ export function TeamDetailTabs({ team, entry, roster }: TeamDetailTabsProps) {
         ) : (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {roster.map((player) => (
-              <Card key={player.id} className="flex flex-col items-center gap-2 p-4 text-center">
-                <span className="font-heading text-xl font-bold text-primary">N°{player.number}</span>
-                <p className="font-heading text-sm font-semibold uppercase text-foreground">{player.name}</p>
-                <p className="text-xs text-muted-foreground">{player.position}</p>
-                <button
-                  onClick={() => setSelectedPlayer(player)}
-                  className="mt-2 text-xs font-semibold text-secondary hover:text-secondary/80"
-                >
-                  Voir la carte complète
-                </button>
-              </Card>
+              <motion.div
+                key={player.id}
+                layoutId={`player-card-${player.id}`}
+                onClick={() => setSelectedPlayer(player)}
+                className="cursor-pointer"
+              >
+                <Card className="flex flex-col items-center gap-2 p-4 text-center transition-shadow hover:shadow-lg">
+                  <span className="font-heading text-xl font-bold text-primary">N°{player.number}</span>
+                  <p className="font-heading text-sm font-semibold uppercase text-foreground">{player.name}</p>
+                  <p className="text-xs text-muted-foreground">{player.position}</p>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedPlayer(player);
+                    }}
+                    className="mt-2 text-xs font-semibold text-secondary hover:text-secondary/80"
+                  >
+                    Voir la carte complète
+                  </button>
+                </Card>
+              </motion.div>
             ))}
           </div>
         )

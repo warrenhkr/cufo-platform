@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Barlow_Condensed, Manrope, JetBrains_Mono } from "next/font/google";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { PageTransition } from "@/components/PageTransition";
 import "./globals.css";
 
 const fontHeading = Barlow_Condensed({
@@ -36,7 +37,9 @@ export default function RootLayout({
         className={`${fontHeading.variable} ${fontSans.variable} ${fontMono.variable} flex min-h-screen flex-col antialiased`}
       >
         <Navbar />
-        <main className="flex-1 pb-20 pt-16 md:pb-0 md:pt-0">{children}</main>
+        <main className="flex-1 pb-20 pt-16 md:pb-0 md:pt-0">
+          <PageTransition>{children}</PageTransition>
+        </main>
         <Footer />
       </body>
     </html>
