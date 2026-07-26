@@ -11,23 +11,23 @@ interface HeroProps {
 }
 
 /**
- * Doc 3.1 + 3.2 + 3.10 — Bandeau d'ouverture "stade en nocturne" : fond
- * navy dégradé (dérivé de --primary, pas de couleur en dur), halo doré
- * diffus (signature visuelle de la home), carte match qui flotte dessus
- * en glassmorphism. Le CTA principal change selon qu'un match est en
- * direct ou non (3.1).
+ * Doc 3.1 + 3.2 + 3.10 — Bandeau d'ouverture "stade en nocturne".
+ * Le overflow-hidden est déplacé sur un <div> interne (background +
+ * halos décoratifs) plutôt que sur la <section> racine, pour ne jamais
+ * créer de contexte de clipping au niveau de la section elle-même.
  */
 export function Hero({ match }: HeroProps) {
   const isLive = match.status === "live";
 
   return (
-    <section className="relative overflow-hidden rounded-b-3xl bg-linear-to-b from-[color-mix(in_oklch,var(--primary)_85%,black)] via-primary to-[color-mix(in_oklch,var(--primary)_75%,white)]">
-      {/* Halo lumineux — évoque les projecteurs de stade, sans illustration figurative (15.2) */}
-      <div className="pointer-events-none absolute -top-24 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-accent/20 blur-[110px]" />
-      <div className="pointer-events-none absolute right-0 top-1/3 h-[280px] w-[280px] rounded-full bg-secondary/15 blur-[100px]" />
+    <section className="relative z-0">
+      <div className="absolute inset-0 -z-10 overflow-hidden rounded-b-3xl bg-linear-to-b from-[color-mix(in_oklch,var(--primary)_85%,black)] via-primary to-[color-mix(in_oklch,var(--primary)_75%,white)]">
+        <div className="pointer-events-none absolute -top-24 left-1/2 h-105 w-105 -translate-x-1/2 rounded-full bg-accent/20 blur-[110px]" />
+        <div className="pointer-events-none absolute right-0 top-1/3 h-70 w-70 rounded-full bg-secondary/15 blur-[100px]" />
+      </div>
 
-      <div className="relative mx-auto grid w-full max-w-[1200px] gap-8 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[2fr_1fr] lg:items-center lg:gap-10 lg:py-20">
-        <motion.div
+      <div className="relative mx-auto grid w-full max-w-300 gap-8 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[2fr_1fr] lg:items-center lg:gap-10 lg:py-20">
+    <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}

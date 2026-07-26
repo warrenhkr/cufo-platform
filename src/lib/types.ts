@@ -126,3 +126,20 @@ export interface MatchDetail {
   headToHead: HeadToHead;
   mvpVoteDeadline?: string;
 }
+
+// --- Compétition : Classement (doc UX/UI section 7) ---
+
+/** Zone du tableau qui déclenche un badge (doc 7.2). "none" = milieu de tableau, pas de badge. */
+export type StandingZone = "qualification" | "playoff" | "relegation" | "none";
+
+export interface StandingEntry {
+  position: number;
+  team: Team;
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  zone: StandingZone;
+}
