@@ -5,29 +5,19 @@ interface CardProps {
   children: ReactNode;
   className?: string;
   as?: ElementType;
-  /** Carte plus contrastée pour un fond sombre (ex. bandeau hero navy) */
-  tone?: "light" | "onDark";
+  /** "onDark" pour un fond sombre (ex. bandeau hero) ; "elevated" pour une
+   *  carte détachée du fond, opaque, avec une ombre marquée (ex. modales,
+   *  carte mise en avant) plutôt que le glassmorphism translucide standard */
+  tone?: "light" | "onDark" | "elevated";
 }
 
-/**
- * Carte de base "iOS glassmorphism" : coins 16–24px, fond translucide,
- * léger flou, bordure fine. Sert de socle à MatchStatusCard, aux cartes
- * joueur/actu, etc. — composer par-dessus plutôt que dupliquer les styles.
- */
-export function Card({
-  children,
-  className = "",
-  as: Tag = "div",
-  tone = "light",
-}: CardProps) {
-  const toneStyles =
-    tone === "onDark"
-      ? "border-primary-foreground/15 bg-primary-foreground/10 text-primary-foreground backdrop-blur-xl"
-      : "border-border bg-card/80 backdrop-blur-xl";
+export function Card({ children, className = "", as: Tag = "div", tone = "light" }: CardProps) {
+  const toneStyles: Record<NonNullable<CardProps["tone"]>, string> = {
+    light: "border-border bg-card/80 backdrop-blur-xl shadow-lg",
+    onDark:
+      "border-primary-foreground/15 bg-primary-foreground/10 text-primary-foreground backdrop-blur-xl shadow-lg",
+    elevated: "border-border/60 bg-card shadow-xl",
+  };
 
-  return (
-    <Tag className={`rounded-2xl border shadow-lg ${toneStyles} ${className}`}>
-      {children}
-    </Tag>
-  );
+  return <Tag className={`rounded-2xl border ${toneStyles[tone]} ${className}`}>{children}</Tag>;
 }

@@ -2,8 +2,11 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import { Zap } from "lucide-react";
+import { Reveal } from "@/components/ui/Reveal";
+import { buttonClassName } from "@/components/ui/Button";
 import { MatchStatusCard } from "./MatchStatusCard";
+import { competitionSummary, featuredPlayers } from "@/lib/mock-data";
 import type { MatchHighlight } from "@/lib/types";
 
 interface HeroProps {
@@ -11,34 +14,35 @@ interface HeroProps {
 }
 
 /**
- * Doc 3.1 + 3.2 + 3.10 — Bandeau d'ouverture "stade en nocturne".
- * Le overflow-hidden est déplacé sur un <div> interne (background +
- * halos décoratifs) plutôt que sur la <section> racine, pour ne jamais
- * créer de contexte de clipping au niveau de la section elle-même.
+ * Doc 3.1 + 3.2 + 3.10 — version "light" (inspiration Campus Market /
+ * Figma Make) : fond clair, badge pilule, dégradés diffus discrets,
+ * rangée de stats sous séparateur. Texte identique à la doc, casse
+ * MAJUSCULE conservée (cohérence avec SectionHeader/PageHeader/MatchHeader).
  */
 export function Hero({ match }: HeroProps) {
   const isLive = match.status === "live";
+  const topScorer = featuredPlayers[0];
+  const topScorerGoals = topScorer.statLabel.split(" ")[0]; // "9 buts" -> "9"
 
   return (
-    <section className="relative z-0">
-      <div className="absolute inset-0 -z-10 overflow-hidden rounded-b-3xl bg-linear-to-b from-[color-mix(in_oklch,var(--primary)_85%,black)] via-primary to-[color-mix(in_oklch,var(--primary)_75%,white)]">
-        <div className="pointer-events-none absolute -top-24 left-1/2 h-105 w-105 -translate-x-1/2 rounded-full bg-accent/20 blur-[110px]" />
-        <div className="pointer-events-none absolute right-0 top-1/3 h-70 w-70 rounded-full bg-secondary/15 blur-[100px]" />
-      </div>
+    <section className="relative overflow-hidden bg-background">
+      <div className="pointer-events-none absolute -top-32 right-0 h-96 w-96 rounded-full bg-secondary/10 blur-[100px]" />
+      <div className="pointer-events-none absolute -left-24 top-48 h-72 w-72 rounded-full bg-accent/15 blur-[100px]" />
 
-      <div className="relative mx-auto grid w-full max-w-300 gap-8 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[2fr_1fr] lg:items-center lg:gap-10 lg:py-20">
-    <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        >
-          <h1 className="font-heading text-[2.75rem] font-bold uppercase leading-[0.95] tracking-tight text-primary-foreground sm:text-6xl lg:text-[4.25rem]">
+      <div className="relative mx-auto grid w-full max-w-300 gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[3fr_2fr] lg:items-center lg:gap-12 lg:py-24">
+        <Reveal distance={12}>
+          <span className="mb-5 inline-flex items-center gap-1.5 rounded-full bg-secondary/10 px-3.5 py-1.5 text-xs font-semibold text-secondary">
+            <Zap size={13} />
+            Championnat CUFO UCAO-UUC
+          </span>
+
+          <h1 className="font-heading text-[2.75rem] font-bold uppercase leading-[0.95] tracking-tight text-foreground sm:text-6xl lg:text-[4.25rem]">
             Le championnat
             <br />
-            universitaire vit ici
+            <span className="text-secondary">universitaire vit ici</span>
           </h1>
 
-          <p className="mt-5 max-w-md text-base text-primary-foreground/75 sm:text-lg">
+          <p className="mt-5 max-w-md text-base text-muted-foreground sm:text-lg">
             Scores en direct, classement, effectifs — tout le CUFO UCAO-UUC
             dans ta poche.
           </p>
@@ -46,26 +50,42 @@ export function Hero({ match }: HeroProps) {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               href={isLive ? "/matchs/direct" : "/matchs/calendrier"}
-              className="rounded-full bg-secondary px-6 py-3 text-sm font-semibold text-secondary-foreground transition-colors hover:bg-secondary/90 sm:text-base"
+              className={buttonClassName(isLive ? "live" : "secondary", "lg")}
             >
               {isLive ? "Suivre le direct" : "Voir le prochain match"}
             </Link>
-            <Link
-              href="/equipes"
-              className="rounded-full border border-primary-foreground/25 bg-primary-foreground/5 px-6 py-3 text-sm font-semibold text-primary-foreground backdrop-blur-md transition-colors hover:bg-primary-foreground/10 sm:text-base"
-            >
+            <Link href="/equipes" className={buttonClassName("outline", "lg")}>
               Découvrir les équipes
             </Link>
           </div>
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
-        >
+          <div className="mt-10 flex items-center gap-8 border-t border-border pt-6">
+            <div>
+              <p className="font-heading text-2xl font-bold text-foreground sm:text-3xl">
+                {competitionSummary.teamsCount}
+              </p>
+              <p className="mt-0.5 text-xs text-muted-foreground">équipes engagées</p>
+            </div>
+            <div>
+              <p className="font-heading text-2xl font-bold text-foreground sm:text-3xl">
+                {competitionSummary.totalGoals}
+              </p>
+              <p className="mt-0.5 text-xs text-muted-foreground">buts marqués</p>
+            </div>
+            <div>
+              <p className="font-heading text-2xl font-bold text-secondary sm:text-3xl">
+                {topScorerGoals}
+              </p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                buts — {topScorer.name.split(" ")[0]}
+              </p>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal distance={12} delay={0.1}>
           <MatchStatusCard match={match} />
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

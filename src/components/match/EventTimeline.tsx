@@ -40,7 +40,10 @@ const BOTTOM_THRESHOLD = 48;
 /** Doc 4.2 — Fil d'événements en direct, façon chat : les nouveaux événements
  * poussent les anciens vers le haut. Auto-scroll actif par défaut, se
  * désactive si l'utilisateur remonte manuellement, se réactive quand il
- * revient tout en bas ou clique le bouton flottant. */
+ * revient tout en bas ou clique le bouton flottant. Chaque type d'événement
+ * a son propre traitement (doc animations, section 1) : but = glow + pop
+ * plus marqué, carton rouge = flash rouge + shake, carton jaune = flash
+ * jaune, changement = apparition simple sans effet superflu. */
 export function EventTimeline({ events }: EventTimelineProps) {
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLUListElement>(null);
@@ -76,7 +79,7 @@ export function EventTimeline({ events }: EventTimelineProps) {
       <ul
         ref={containerRef}
         onScroll={handleScroll}
-        className="flex max-h-[480px] flex-col gap-1 overflow-y-auto scroll-smooth"
+        className="flex max-h-120 flex-col gap-1 overflow-y-auto scroll-smooth"
       >
         <AnimatePresence initial={false}>
           {ordered.map((event) => {
@@ -85,11 +88,21 @@ export function EventTimeline({ events }: EventTimelineProps) {
             const isRedCard = event.type === "red_card";
             const isYellowCard = event.type === "yellow_card";
 
+            const flashClass = reduceMotion
+              ? ""
+              : isGoal
+                ? "animate-flash-goal"
+                : isRedCard
+                  ? "animate-flash-red"
+                  : isYellowCard
+                    ? "animate-flash-yellow"
+                    : "";
+
             return (
               <motion.li
                 key={event.id}
                 layout={!reduceMotion}
-                initial={reduceMotion ? false : { opacity: 0, y: 12, scale: isGoal ? 0.92 : 1 }}
+                initial={reduceMotion ? false : { opacity: 0, y: 12, scale: isGoal ? 0.88 : 1 }}
                 animate={
                   reduceMotion
                     ? { opacity: 1 }
@@ -97,8 +110,8 @@ export function EventTimeline({ events }: EventTimelineProps) {
                       ? { opacity: 1, y: 0, scale: 1, x: [0, -4, 4, -3, 3, 0] }
                       : { opacity: 1, y: 0, scale: 1 }
                 }
-                transition={{ duration: isRedCard ? 0.45 : 0.3, ease: "easeOut" }}
-                className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 ${
+                transition={{ duration: isRedCard ? 0.45 : isGoal ? 0.4 : 0.3, ease: "easeOut" }}
+                className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 ${flashClass} ${
                   isGoal
                     ? "border-primary/30 bg-primary/5"
                     : isRedCard

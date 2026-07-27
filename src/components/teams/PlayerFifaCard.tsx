@@ -1,9 +1,9 @@
-// components/teams/PlayerFifaCard.tsx
 "use client";
 
 import { useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { X, UserRound, Share2 } from "lucide-react";
+import { X, Share2 } from "lucide-react";
+import { PlayerAvatar } from "./PlayerAvatar";
 import type { Player } from "@/lib/team-types";
 import type { Team } from "@/lib/types";
 
@@ -22,6 +22,59 @@ const ATTRIBUTE_LABELS: { key: keyof Player["attributes"]; label: string }[] = [
   { key: "defense", label: "Défense" },
   { key: "physical", label: "Physique" },
 ];
+
+function PitchBackdrop({ reduceMotion }: { reduceMotion: boolean }) {
+  const transition = (delay = 0) =>
+    reduceMotion
+      ? { duration: 0 }
+      : { duration: 0.9, delay, ease: [0.65, 0, 0.35, 1] as const };
+  const initial = reduceMotion ? undefined : { pathLength: 0 };
+
+  return (
+    <svg
+      viewBox="0 0 400 400"
+      className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-20"
+      aria-hidden="true"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      <motion.rect
+        x="20"
+        y="20"
+        width="360"
+        height="360"
+        rx="4"
+        fill="none"
+        stroke="white"
+        strokeWidth="1.5"
+        initial={initial}
+        animate={{ pathLength: 1 }}
+        transition={transition()}
+      />
+      <motion.line
+        x1="20"
+        y1="200"
+        x2="380"
+        y2="200"
+        stroke="white"
+        strokeWidth="1.5"
+        initial={initial}
+        animate={{ pathLength: 1 }}
+        transition={transition(0.1)}
+      />
+      <motion.circle
+        cx="200"
+        cy="200"
+        r="70"
+        fill="none"
+        stroke="white"
+        strokeWidth="1.5"
+        initial={initial}
+        animate={{ pathLength: 1 }}
+        transition={transition(0.2)}
+      />
+    </svg>
+  );
+}
 
 export function PlayerFifaCard({ player, team, open, onClose }: PlayerFifaCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -58,13 +111,15 @@ export function PlayerFifaCard({ player, team, open, onClose }: PlayerFifaCardPr
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
           onClick={onClose}
         >
+          <PitchBackdrop reduceMotion={!!reduceMotion} />
+
           <motion.div
             layoutId={layoutId}
             initial={{ opacity: 0, scale: 0.94, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 12 }}
             transition={{ duration: 0.2 }}
-            className="relative flex flex-col items-center gap-5"
+            className="relative z-10 flex flex-col items-center gap-5"
             style={{ perspective: 800 }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -92,18 +147,13 @@ export function PlayerFifaCard({ player, team, open, onClose }: PlayerFifaCardPr
                 )}
               </div>
 
-              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-muted">
-                {player.photoUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={player.photoUrl} alt={player.name} className="h-full w-full rounded-full object-cover" />
-                ) : (
-                  <UserRound size={40} className="text-muted-foreground" />
-                )}
-              </div>
+              <PlayerAvatar name={player.name} photoUrl={player.photoUrl} size={96} />
 
               <div className="text-center">
                 <p className="font-heading text-lg font-bold uppercase text-foreground">{player.name}</p>
-                <p className="text-sm text-muted-foreground">{player.position} · {team.name}</p>
+                <p className="text-sm text-muted-foreground">
+                  {player.position} · {team.name}
+                </p>
               </div>
 
               <div className="grid w-full grid-cols-2 gap-x-4 gap-y-2">

@@ -1,10 +1,10 @@
-// app/matchs/resultats/page.tsx
 "use client";
 
 import { useMemo, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { ResultCard } from "@/components/results/ResultCard";
+import { NetMotif } from "@/components/decorative/NetMotif";
 import { pastResults } from "@/lib/results-mock-data";
 import { teams } from "@/lib/mock-data";
 
@@ -32,46 +32,50 @@ export default function ResultsPage() {
   });
 
   return (
-    <Container className="py-8 sm:py-10">
-      <PageHeader title="Résultats" subtitle="Tous les matchs joués, journée par journée" />
+    <div className="relative overflow-hidden">
+      <NetMotif />
 
-      <div className="mb-6 flex flex-wrap gap-3">
-        <select
-          value={selectedTeam}
-          onChange={(e) => setSelectedTeam(e.target.value)}
-          className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground"
-        >
-          <option value="">Filtrer par équipe</option>
-          {teamOptions.map((t) => (
-            <option key={t.id} value={t.id}>{t.name}</option>
-          ))}
-        </select>
-        <select
-          value={selectedMatchday}
-          onChange={(e) => setSelectedMatchday(e.target.value)}
-          className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground"
-        >
-          <option value="">Toutes les journées</option>
-          {matchdayOptions.map((day) => (
-            <option key={day} value={day}>Journée {day}</option>
-          ))}
-        </select>
-      </div>
+      <Container className="relative z-10 py-8 sm:py-10">
+        <PageHeader title="Résultats" subtitle="Tous les matchs joués, journée par journée" />
 
-      {filtered.length === 0 ? (
-        <div className="rounded-2xl border border-border bg-card/80 p-8 text-center">
-          <h2 className="font-heading text-xl font-semibold text-foreground">Pas encore de résultats</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Les premiers scores apparaîtront ici dès le coup d&rsquo;envoi de la saison.
-          </p>
+        <div className="mb-6 flex flex-wrap gap-3">
+          <select
+            value={selectedTeam}
+            onChange={(e) => setSelectedTeam(e.target.value)}
+            className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground"
+          >
+            <option value="">Filtrer par équipe</option>
+            {teamOptions.map((t) => (
+              <option key={t.id} value={t.id}>{t.name}</option>
+            ))}
+          </select>
+          <select
+            value={selectedMatchday}
+            onChange={(e) => setSelectedMatchday(e.target.value)}
+            className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground"
+          >
+            <option value="">Toutes les journées</option>
+            {matchdayOptions.map((day) => (
+              <option key={day} value={day}>Journée {day}</option>
+            ))}
+          </select>
         </div>
-      ) : (
-        <div className="flex flex-col gap-3">
-          {filtered.map((result, index) => (
-            <ResultCard key={result.id} result={result} index={index} />
-          ))}
-        </div>
-      )}
-    </Container>
+
+        {filtered.length === 0 ? (
+          <div className="rounded-2xl border border-border bg-card/80 p-8 text-center">
+            <h2 className="font-heading text-xl font-semibold text-foreground">Pas encore de résultats</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Les premiers scores apparaîtront ici dès le coup d&rsquo;envoi de la saison.
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {filtered.map((result, index) => (
+              <ResultCard key={result.id} result={result} index={index} />
+            ))}
+          </div>
+        )}
+      </Container>
+    </div>
   );
 }

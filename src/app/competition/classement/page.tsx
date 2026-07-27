@@ -4,14 +4,16 @@
 import { useState } from "react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
+import { Badge } from "@/components/ui/Badge";
 import { standings, currentMatchday, totalMatchdays } from "@/lib/mock-data";
 import type { StandingEntry, StandingZone } from "@/lib/types";
 
-const zoneStyles: Record<StandingZone, { border: string; dot: string }> = {
-  qualification: { border: "border-l-emerald-500", dot: "bg-emerald-500" },
-  playoff: { border: "border-l-amber-500", dot: "bg-amber-500" },
-  relegation: { border: "border-l-destructive", dot: "bg-destructive" },
-  none: { border: "border-l-transparent", dot: "bg-transparent" },
+const zoneBorder: Record<StandingZone, string> = {
+  qualification: "border-l-emerald-500",
+  playoff: "border-l-amber-500",
+  relegation: "border-l-destructive",
+  none: "border-l-transparent",
 };
 
 function TeamCrest({ name, color }: { name: string; color: string }) {
@@ -43,12 +45,12 @@ function StandingRow({
 }) {
   const goalDifference = entry.goalsFor - entry.goalsAgainst;
   const points = entry.won * 3 + entry.drawn;
-  const zone = zoneStyles[entry.zone];
+  const border = zoneBorder[entry.zone];
 
   return (
     <>
       {/* Ligne desktop : tableau complet, toujours visible */}
-      <tr className={`hidden border-l-4 sm:table-row ${zone.border}`}>
+      <tr className={`hidden border-l-4 sm:table-row ${border}`}>
         <td className="py-3 pl-4 text-sm font-semibold text-foreground">{entry.position}</td>
         <td className="py-3">
           <div className="flex items-center gap-3">
@@ -69,7 +71,7 @@ function StandingRow({
       </tr>
 
       {/* Ligne mobile condensée : Pos / équipe / Pts visibles, reste au tap (doc 7.9) */}
-      <tr className={`table-row border-l-4 sm:hidden ${zone.border}`}>
+      <tr className={`table-row border-l-4 sm:hidden ${border}`}>
         <td colSpan={10} className="py-0">
           <button
             onClick={onToggle}
@@ -129,60 +131,66 @@ export default function ClassementPage() {
           </p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-border bg-card/80">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="hidden border-b border-border/60 sm:table-row">
-                <th className="py-3 pl-4 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Pos.
-                </th>
-                <th className="py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Équipe
-                </th>
-                <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  J
-                </th>
-                <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  G
-                </th>
-                <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  N
-                </th>
-                <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  P
-                </th>
-                <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  BP
-                </th>
-                <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  BC
-                </th>
-                <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Diff.
-                </th>
-                <th className="py-3 pr-4 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Pts
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border/60 sm:[&>tr]:divide-y-0">
-              {standings.map((entry) => (
-                <StandingRow
-                  key={entry.team.id}
-                  entry={entry}
-                  expanded={expandedId === entry.team.id}
-                  onToggle={() =>
-                    setExpandedId(expandedId === entry.team.id ? null : entry.team.id)
-                  }
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Reveal>
+          <div className="overflow-hidden rounded-2xl border border-border bg-card/80">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="hidden border-b border-border/60 sm:table-row">
+                  <th className="py-3 pl-4 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Pos.
+                  </th>
+                  <th className="py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Équipe
+                  </th>
+                  <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    J
+                  </th>
+                  <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    G
+                  </th>
+                  <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    N
+                  </th>
+                  <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    P
+                  </th>
+                  <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    BP
+                  </th>
+                  <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    BC
+                  </th>
+                  <th className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Diff.
+                  </th>
+                  <th className="py-3 pr-4 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Pts
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border/60 sm:[&>tr]:divide-y-0">
+                {standings.map((entry) => (
+                  <StandingRow
+                    key={entry.team.id}
+                    entry={entry}
+                    expanded={expandedId === entry.team.id}
+                    onToggle={() =>
+                      setExpandedId(expandedId === entry.team.id ? null : entry.team.id)
+                    }
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Reveal>
       )}
 
       <div className="mt-4 flex flex-col gap-2 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <p>🟢 Qualification directe · 🟠 Barrage · 🔴 Relégation</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="zone-qualification">Qualification directe</Badge>
+          <Badge variant="zone-playoff">Barrage</Badge>
+          <Badge variant="zone-relegation">Relégation</Badge>
+        </div>
         <p>Classement mis à jour automatiquement après chaque match.</p>
       </div>
     </Container>

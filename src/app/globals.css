@@ -33,13 +33,9 @@
     --sidebar-accent-foreground: oklch(0.9842 0.0034 247.8575);
     --sidebar-border: oklch(0.3735 0.0899 265.1771);
     --sidebar-ring: #E3B23C;
-    /* Manrope = corps, Barlow Condensed = titres. Ces valeurs sont des
-     fallbacks : next/font écrase --font-sans / --font-heading avec les
-     vraies polices chargées via layout.tsx (voir plus bas). */
     --font-sans: "Manrope", "System UI", sans-serif;
     --font-heading: "Barlow Condensed", "System UI", sans-serif;
     --font-mono: "JetBrains Mono", monospace;
-    /* Radius inchangé (style iOS) — Figma Make proposait 0.625rem, à trancher (voir note) */
     --radius: 1rem;
     --shadow-x: 0px;
     --shadow-y: 1px;
@@ -270,10 +266,80 @@
     animation: fade-in 0.4s ease-out forwards;
 }
 
+
+/* Timeline d'événements de match — flashs par type d'événement (doc animations,
+   section 1). Le shake du carton rouge reste géré en JS (motion, EventTimeline.tsx) ;
+   ces trois classes gèrent uniquement le flash de fond, en overlay temporaire sur
+   la teinte statique déjà posée par Tailwind (l'animation revient à la couleur de
+   la classe une fois terminée, sans JS supplémentaire). */
+
+@keyframes event-flash-goal {
+    0% {
+        box-shadow: 0 0 0 0 color-mix(in oklch, var(--primary) 45%, transparent);
+    }
+    100% {
+        box-shadow: 0 0 0 14px color-mix(in oklch, var(--primary) 0%, transparent);
+    }
+}
+
+.animate-flash-goal {
+    animation: event-flash-goal 700ms ease-out;
+}
+
+@keyframes event-flash-red {
+    0% {
+        background-color: color-mix(in oklch, var(--destructive) 35%, transparent);
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+.animate-flash-red {
+    animation: event-flash-red 700ms ease-out;
+}
+
+@keyframes event-flash-yellow {
+    0% {
+        background-color: color-mix(in oklch, var(--accent) 40%, transparent);
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+.animate-flash-yellow {
+    animation: event-flash-yellow 700ms ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .animate-score-bump,
     .animate-pulse-ring,
-    .animate-fade-in {
+    .animate-fade-in,
+    .animate-flash-goal,
+    .animate-flash-red,
+    .animate-flash-yellow {
         animation: none;
+    }
+}
+
+@keyframes team-halo-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.team-halo {
+    opacity: 0;
+    animation: team-halo-in 1.1s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .team-halo {
+        animation: none;
+        opacity: 1;
     }
 }
