@@ -10,6 +10,7 @@ import {
   Radio, Calendar, History, Medal, BarChart3, FileText,
   Building2, Handshake, Mail, Menu, X, MessageCircle,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const desktopNav = [
   { label: "Accueil", href: "/", icon: Home },
@@ -235,6 +236,7 @@ export function Navbar() {
             <DesktopItem key={item.label} item={item} pathname={pathname} />
           ))}
         </nav>
+        <ThemeToggle />
       </header>
 
       {/* Barre du haut mobile / tablette (<1024px) — seul point d'entrée nav */}
@@ -242,13 +244,16 @@ export function Navbar() {
         <h1 className="font-heading text-lg font-extrabold uppercase text-foreground">
           CUFO <span className="text-secondary">UCAO-UUC</span>
         </h1>
-        <button
-          onClick={() => setMobileMenuOpen(true)}
-          aria-label="Ouvrir le menu"
-          className="p-2 text-foreground"
-        >
-          <Menu size={24} />
-        </button>
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            aria-label="Ouvrir le menu"
+            className="p-2 text-foreground"
+          >
+            <Menu size={24} />
+          </button>
+        </div>
       </div>
 
       {/* Menu plein écran mobile/tablette — remplace la tab bar basse */}

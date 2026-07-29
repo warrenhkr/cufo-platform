@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/Container";
 import { TeamDetailTabs } from "@/components/teams/TeamDetailTabs";
 import { standings } from "@/lib/mock-data";
 import { playersByTeam } from "@/lib/team-mock-data";
+import TeamHalo from "@/components/teams/TeamHalo";
 
 function pluralize(count: number, singular: string, plural: string) {
   return count > 1 ? plural : singular;
@@ -23,13 +24,7 @@ export default async function TeamDetailPage({
 
   return (
     <div className="relative overflow-hidden">
-      <div
-        className="team-halo pointer-events-none absolute inset-x-0 -top-16 h-80"
-        style={{
-          background: `radial-gradient(ellipse 60% 100% at 50% 0%, ${entry.team.primaryColor}1f, transparent 70%)`,
-        }}
-        aria-hidden="true"
-      />
+      <TeamHalo color={entry.team.primaryColor} />
 
       <Container className="relative z-10 py-10">
         <div className="mb-8 flex items-center gap-4">

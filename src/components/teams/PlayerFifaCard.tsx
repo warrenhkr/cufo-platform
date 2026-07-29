@@ -33,7 +33,7 @@ function PitchBackdrop({ reduceMotion }: { reduceMotion: boolean }) {
   return (
     <svg
       viewBox="0 0 400 400"
-      className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-20"
+      className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-30"
       aria-hidden="true"
       preserveAspectRatio="xMidYMid slice"
     >
@@ -44,8 +44,9 @@ function PitchBackdrop({ reduceMotion }: { reduceMotion: boolean }) {
         height="360"
         rx="4"
         fill="none"
-        stroke="white"
+        stroke="currentColor"
         strokeWidth="1.5"
+        strokeOpacity="0.4"
         initial={initial}
         animate={{ pathLength: 1 }}
         transition={transition()}
@@ -55,8 +56,9 @@ function PitchBackdrop({ reduceMotion }: { reduceMotion: boolean }) {
         y1="200"
         x2="380"
         y2="200"
-        stroke="white"
+        stroke="currentColor"
         strokeWidth="1.5"
+        strokeOpacity="0.4"
         initial={initial}
         animate={{ pathLength: 1 }}
         transition={transition(0.1)}
@@ -66,8 +68,9 @@ function PitchBackdrop({ reduceMotion }: { reduceMotion: boolean }) {
         cy="200"
         r="70"
         fill="none"
-        stroke="white"
+        stroke="currentColor"
         strokeWidth="1.5"
+        strokeOpacity="0.4"
         initial={initial}
         animate={{ pathLength: 1 }}
         transition={transition(0.2)}
@@ -111,18 +114,16 @@ export function PlayerFifaCard({ player, team, open, onClose }: PlayerFifaCardPr
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
           onClick={onClose}
         >
-          <PitchBackdrop reduceMotion={!!reduceMotion} />
-
-          <motion.div
-            layoutId={layoutId}
-            initial={{ opacity: 0, scale: 0.94, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.94, y: 12 }}
-            transition={{ duration: 0.2 }}
-            className="relative z-10 flex flex-col items-center gap-5"
-            style={{ perspective: 800 }}
-            onClick={(e) => e.stopPropagation()}
-          >
+        <motion.div
+          layoutId={layoutId}
+          initial={{ opacity: 0, scale: 0.94, y: 12 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.94, y: 12 }}
+          transition={{ duration: 0.2 }}
+          className="relative z-10 flex flex-col items-center gap-5"
+          style={{ perspective: 800 }}
+          onClick={(e) => e.stopPropagation()}
+        >
             <button
               onClick={onClose}
               className="absolute -top-10 right-0 text-white/80 hover:text-white"
@@ -136,9 +137,11 @@ export function PlayerFifaCard({ player, team, open, onClose }: PlayerFifaCardPr
               whileHover={reduceMotion ? {} : { rotateY: 4 }}
               transition={{ duration: 0.15 }}
               style={{ transformStyle: "preserve-3d" }}
-              className="flex w-72 flex-col items-center gap-4 rounded-3xl border border-border bg-card p-6 text-card-foreground shadow-xl"
+              className="relative flex w-72 flex-col items-center gap-4 overflow-hidden rounded-3xl border border-border bg-card p-6 text-card-foreground shadow-xl"
             >
-              <div className="flex w-full items-start justify-between">
+              {/* Terrain FIFA en fond de la carte */}
+              <PitchBackdrop reduceMotion={!!reduceMotion} />
+              <div className="relative z-10 flex w-full items-start justify-between">
                 <span className="font-heading text-4xl font-extrabold text-primary">{player.number}</span>
                 {player.badge && (
                   <span className="rounded-full bg-accent/15 px-2.5 py-1 text-[10px] font-bold uppercase text-accent-foreground">

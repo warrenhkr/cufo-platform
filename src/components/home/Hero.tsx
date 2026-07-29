@@ -6,6 +6,7 @@ import { Zap } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { buttonClassName } from "@/components/ui/Button";
 import { MatchStatusCard } from "./MatchStatusCard";
+import { PitchMotif } from "@/components/decorative/PitchMotif";
 import { competitionSummary, featuredPlayers } from "@/lib/mock-data";
 import type { MatchHighlight } from "@/lib/types";
 
@@ -25,11 +26,14 @@ export function Hero({ match }: HeroProps) {
   const topScorerGoals = topScorer.statLabel.split(" ")[0]; // "9 buts" -> "9"
 
   return (
-    <section className="relative overflow-hidden bg-background">
+    <section className="relative min-h-[560px] overflow-hidden bg-background sm:min-h-[640px] lg:min-h-[700px]">
+      {/* Motif terrain animé — joué une fois par session */}
+      <PitchMotif />
+
       <div className="pointer-events-none absolute -top-32 right-0 h-96 w-96 rounded-full bg-secondary/10 blur-[100px]" />
       <div className="pointer-events-none absolute -left-24 top-48 h-72 w-72 rounded-full bg-accent/15 blur-[100px]" />
 
-      <div className="relative mx-auto grid w-full max-w-300 gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[3fr_2fr] lg:items-center lg:gap-12 lg:py-24">
+      <div className="relative z-10 mx-auto grid w-full max-w-300 gap-12 px-4 py-16 sm:gap-14 sm:px-6 sm:py-20 lg:grid-cols-[3fr_2fr] lg:items-center lg:gap-16 lg:py-28">
         <Reveal distance={12}>
           <span className="mb-5 inline-flex items-center gap-1.5 rounded-full bg-secondary/10 px-3.5 py-1.5 text-xs font-semibold text-secondary">
             <Zap size={13} />
@@ -59,7 +63,7 @@ export function Hero({ match }: HeroProps) {
             </Link>
           </div>
 
-          <div className="mt-10 flex items-center gap-8 border-t border-border pt-6">
+          <div className="mt-12 flex items-center gap-8 border-t border-border pt-6">
             <div>
               <p className="font-heading text-2xl font-bold text-foreground sm:text-3xl">
                 {competitionSummary.teamsCount}

@@ -2,7 +2,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { LiveStatusBadge } from "@/components/ui/LiveStatusBadge";
 import type { MatchDetail } from "@/lib/match-types";
 
@@ -27,22 +27,46 @@ export function MatchHeader({ match }: MatchHeaderProps) {
 
   const [homeScoreAnimKey, setHomeScoreAnimKey] = useState(0);
   const [awayScoreAnimKey, setAwayScoreAnimKey] = useState(0);
+  const [lastGoalTeam, setLastGoalTeam] = useState<"home" | "away" | null>(null);
 
   // Détecte les changements de score et déclenche l'animation uniquement pour le score modifié
   useEffect(() => {
-    if (match.homeScore !== prevHomeScoreRef.current) {
+    if (match.homeScore > prevHomeScoreRef.current) {
       setHomeScoreAnimKey((k) => k + 1);
+      setLastGoalTeam("home");
       prevHomeScoreRef.current = match.homeScore;
     }
-    if (match.awayScore !== prevAwayScoreRef.current) {
+    if (match.awayScore > prevAwayScoreRef.current) {
       setAwayScoreAnimKey((k) => k + 1);
+      setLastGoalTeam("away");
       prevAwayScoreRef.current = match.awayScore;
     }
   }, [match.homeScore, match.awayScore]);
 
+  // Réinitialiser le flash après un court délai
+  useEffect(() => {
+    if (lastGoalTeam) {
+      const t = setTimeout(() => setLastGoalTeam(null), 1000);
+      return () => clearTimeout(t);
+    }
+  }, [lastGoalTeam]);
+
   return (
-    <div className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-300 flex-col items-center gap-3 px-4 py-5 sm:px-6">
+    <div className="sticky top-0 z-40 border-b border-border bg-background/60 backdrop-blur-2xl transition-colors relative overflow-hidden">
+      {/* Flash animation on goal */}
+      <AnimatePresence>
+        {lastGoalTeam && !reduceMotion && (
+          <motion.div
+            initial={{ opacity: 0.8 }}
+            animate={{ opacity: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="absolute inset-0 z-0 bg-secondary/20 pointer-events-none"
+          />
+        )}
+      </AnimatePresence>
+
+      <div className="relative z-10 mx-auto flex w-full max-w-300 flex-col items-center gap-3 px-4 py-5 sm:px-6">
         <div className="flex items-center gap-3">
           <span className="hidden sm:inline-flex">
             <LiveStatusBadge status={match.status} />
@@ -50,7 +74,7 @@ export function MatchHeader({ match }: MatchHeaderProps) {
           <span className="inline-flex sm:hidden">
             <LiveStatusBadge status={match.status} compact />
           </span>
-          <span className="text-xs text-muted-foreground">{match.matchdayLabel}</span>
+          <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{match.matchdayLabel}</span>
         </div>
 
         <div className="grid w-full max-w-lg grid-cols-[1fr_auto_1fr] items-center gap-2">
@@ -65,20 +89,20 @@ export function MatchHeader({ match }: MatchHeaderProps) {
               <div className="flex items-center gap-1 font-heading text-4xl font-bold tabular-nums text-foreground sm:text-5xl">
                 <motion.span
                   key={`home-${homeScoreAnimKey}`}
-                  initial={reduceMotion ? {} : { scale: 1.18 }}
-                  animate={reduceMotion ? {} : { scale: 1 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  initial={reduceMotion ? {} : { scale: 1.4, color: "var(--secondary)" }}
+                  animate={reduceMotion ? {} : { scale: 1, color: "var(--foreground)" }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   className={reduceMotion ? "" : "inline-block"}
                   style={reduceMotion ? {} : { filter: "drop-shadow(0 0 16px color-mix(in oklch, var(--secondary) 70%, transparent))" }}
                 >
                   {match.homeScore}
                 </motion.span>
-                <span className="text-foreground">–</span>
+                <span className="text-foreground/50 mx-1">–</span>
                 <motion.span
                   key={`away-${awayScoreAnimKey}`}
-                  initial={reduceMotion ? {} : { scale: 1.18 }}
-                  animate={reduceMotion ? {} : { scale: 1 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  initial={reduceMotion ? {} : { scale: 1.4, color: "var(--secondary)" }}
+                  animate={reduceMotion ? {} : { scale: 1, color: "var(--foreground)" }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   className={reduceMotion ? "" : "inline-block"}
                   style={reduceMotion ? {} : { filter: "drop-shadow(0 0 16px color-mix(in oklch, var(--secondary) 70%, transparent))" }}
                 >
@@ -87,7 +111,7 @@ export function MatchHeader({ match }: MatchHeaderProps) {
               </div>
             )}
             {(match.status === "live" || match.status === "halftime") && (
-              <span className="mt-1 font-heading text-sm font-semibold tabular-nums text-secondary">
+              <span className="mt-1 font-heading text-sm font-semibold tabular-nums text-secondary animate-pulse">
                 {formatClock(match.clockSeconds)}
               </span>
             )}

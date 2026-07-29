@@ -21,10 +21,10 @@ export function NetMotif() {
         width="100%"
         height="100%"
         fill="url(#net-mesh)"
-        initial={shouldAnimate ? { opacity: 0 } : undefined}
+        initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1.2 }}
+        transition={shouldAnimate ? { duration: 1.2, ease: "easeOut" } : { duration: 0 }}
       />
     </svg>
   );
-}
+}
